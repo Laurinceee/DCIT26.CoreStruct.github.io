@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="setting.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="icon-content">
+                <div><a href="home_page.html">menu</a></div>
+                <div><a href="profile.html">Profile</a></div>
+                <div><a href="file.html">Files</a></div>
+                <div><a href="Notification.html">Notification</a></div>
+                <div><a href="Global_Announce.html">Global announcement</a></div>
+                <div><a href="setting.html" class="active">Settings</a></div>
+                <div><a href="help.html">Help</a></div>
+                <div><a href="index.html" id="logout-link">log-out</a></div>
+            </div>
+        </aside>
+
+        <main>
+            <header>
+                <h2>Settings</h2>
+            </header>
+
+            <div class="content-box">
+                <div class="section">
+                    <h2>Full Name</h2>
+                    <input type="text" id="full-name" placeholder="Enter your full name">
+                </div>
+
+                <div class="section">
+                    <h2>Email</h2>
+                    <input type="email" id="email-address" placeholder="Enter your email address">
+                </div>
+
+                <div class="section">
+                    <h2>Contact</h2>
+                    <input type="text" id="contact" placeholder="Enter your contact info">
+                </div>
+
+                <div class="section">
+                    <h2>Biography</h2>
+                    <textarea id="biography" placeholder="Write your biography"></textarea>
+                </div>
+
+                <div class="section">
+                    <h2>Links</h2>
+                    <input type="text" id="links" placeholder="Enter your links">
+                </div>
+
+                <div class="section">
+                    <h2>Activity Logging</h2>
+                    <label for="activity-logging">Enable Activity Logging</label>
+                    <input type="checkbox" id="activity-logging">
+                </div>
+
+                <div class="section">
+                    <button id="delete-account-btn">Permanently Delete Account</button>
+                    <p id="delete-warning" style="color: red; display: none;">This action cannot be undone.</p>
+                </div>
+
+                <div class="section">
+                    <button id="save-changes-btn">Save Changes</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fullNameInput = document.getElementById('full-name');
+            const emailInput = document.getElementById('email-address');
+            const contactInput = document.getElementById('contact');
+            const biographyInput = document.getElementById('biography');
+            const linksInput = document.getElementById('links');
+            const activityLoggingCheckbox = document.getElementById('activity-logging');
+            const saveChangesBtn = document.getElementById('save-changes-btn');
+
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+            if (loggedInUser) {
+                fullNameInput.value = loggedInUser.name || '';
+                emailInput.value = loggedInUser.email || '';
+                contactInput.value = loggedInUser.contact || '';
+                biographyInput.value = loggedInUser.biography || '';
+                linksInput.value = loggedInUser.links || '';
+                activityLoggingCheckbox.checked = loggedInUser.activityLogging || false;
+            }
+
+            saveChangesBtn.addEventListener('click', () => {
+                const updatedUser = {
+                    name: fullNameInput.value.trim(),
+                    email: emailInput.value.trim(),
+                    contact: contactInput.value.trim(),
+                    biography: biographyInput.value.trim(),
+                    links: linksInput.value.trim(),
+                    activityLogging: activityLoggingCheckbox.checked
+                };
+
+                if (updatedUser.name === "" || updatedUser.email === "") {
+                    alert("Name and Email are required fields.");
+                    return;
+                }
+
+                localStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
+
+                alert("Changes saved successfully!");
+                window.location.href = "profile.html";
+            });
+        });
+    </script>
+    <script>
+        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        if (loggedInUser) {
+            document.getElementById('userName').textContent = loggedInUser.name;
+            document.getElementById('userEmail').textContent = loggedInUser.email;
+        } else {
+            window.location.href = "login.html";
+        }
+    </script>
+    <script>
+    document.getElementById('logout-link').addEventListener('click', () => {
+        localStorage.removeItem('loggedInUser');
+        window.location.href = "index.html";
+    });
+    </script>
+</body>
+</html>
