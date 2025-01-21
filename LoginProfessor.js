@@ -86,3 +86,4 @@ function resetForm() {
   authForm.reset();
   errorMessage.style.display = "none";
 }
+const newUser = { name, email, password, department, contact };
